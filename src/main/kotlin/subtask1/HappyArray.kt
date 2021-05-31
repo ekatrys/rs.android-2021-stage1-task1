@@ -3,27 +3,28 @@ package subtask1
 class HappyArray {
 
     fun convertToHappy(sadArray: IntArray): IntArray {
-        var array = sadArray.toMutableList()
-        var isArrayHappy = false
-
-        while (!isArrayHappy) {
-            val arrayNext = createHappyArray(array)
-            if (arrayNext.size != array.size) array = arrayNext
-            else isArrayHappy = true
+        val size = sadArray.size
+        if(size < 3){
+            return sadArray
         }
-        return array.toIntArray()
-    }
 
-    private fun createHappyArray(
-        array: MutableList<Int>
-    ): MutableList<Int> {
-        val happyArray = mutableListOf<Int>()
-        happyArray.add(array[0])
-        for (i in 1 until array.size) {
-            val summ = array[i - 1] + array[i + 1]
-            if (array[i] > summ) happyArray.add(array[i])
+        val happyIndices = ArrayList<Int>()
+        happyIndices.add(0)
+
+        for(i in 1..size - 2) {
+            if(sadArray[i-1] + sadArray[i+1] >= sadArray[i]) {
+                happyIndices.add(i)
+            }
         }
-        happyArray.add(array.last())
-        return happyArray
+
+        happyIndices.add(size-1)
+
+        val result = sadArray.sliceArray(happyIndices)
+
+        if(happyIndices.size == size) {
+            return result
+        }
+
+        return convertToHappy(result)
     }
 }
